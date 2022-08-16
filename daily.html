@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzles</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+
+    <link rel="stylesheet"
+      href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
+      crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+        crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
+        crossorigin="anonymous"></script>
+
+    <style>
+
+        #chess {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #ui {
+            width:50%;
+        }
+
+        #turn-heading {
+            background-color: black;
+            font-weight: bold;
+            font-size: 2em;
+            text-align: center;
+            padding:8px;
+        }
+
+    </style>
+</head>
+<body>
+    <section id="chess">
+        <div id="ui">
+            <div id="turn-heading">
+                <p id='turn'></p>
+            </div>
+        </div>
+        <div id="board1" style="width: 50%"></div>
+
+    </section>
+    
+</body>
+<script>
+
+var puzzleData = null;
+var moveNumber = 0;
+
+$.ajax({
+    url: "https://lichess.org/api/puzzle/daily",
+    type: "GET",
+    async: false,
+    success: function(data) {
+        puzzleData = data;
+    },
+    error: function(data) {
+        console.log(data);
+    }
+});
+
+function pieceTheme(piece) {
+    return `https://chessmates.com.au/wp-content/uploads/${piece}.png`;
+}
+
+var board = null;
+var game = new Chess();
+var $status = $('#status');
+var $fen = $('#fen');
+var $pgn = $('#pgn');
+
+function onDragStart (source, piece, position, orientation) {
+  // do not pick up pieces if the game is over
+  if (game.game_over()) return false
+
+  // only pick up pieces for the side to move
+  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+    return false
+  }
+}
+
+function onDrop (source, target, playerMove=true) {
+    if(source + target == puzzleData.puzzle.solution[moveNumber]) {
+        moveNumber++;
+    } else {
+        return 'snapback';
+    }
+    // see if the move is legal
+    var move = game.move({
+        from: source,
+        to: target,
+        promotion: 'q' // NOTE: always promote to a queen for example simplicity
+    });
+
+    // illegal move
+    if (move === null) {
+        return 'snapback';
+    }
+
+    updateStatus();
+    if(playerMove && puzzleData.puzzle.solution[moveNumber] != null) {
+        onDrop(puzzleData.puzzle.solution[moveNumber].substring(0, 2), puzzleData.puzzle.solution[moveNumber].substring(2, 4), false);
+    }
+
+    if(moveNumber == puzzleData.puzzle.solution.length) {
+        console.log('You win!');
+    }
+}
+
+// update the board position after the piece snap
+// for castling, en passant, pawn promotion
+function onSnapEnd () {
+  board.position(game.fen())
+}
+
+function updateStatus () {
+  var status = ''
+
+  var moveColor = 'White'
+  if (game.turn() === 'b') {
+    moveColor = 'Black'
+  }
+
+  // checkmate?
+  if (game.in_checkmate()) {
+    status = 'Game over, ' + moveColor + ' is in checkmate.'
+  }
+
+  // draw?
+  else if (game.in_draw()) {
+    status = 'Game over, drawn position'
+  }
+
+  // game still on
+  else {
+    status = moveColor + ' to move'
+
+    // check?
+    if (game.in_check()) {
+      status += ', ' + moveColor + ' is in check'
+    }
+  }
+}
+
+var config = {
+  draggable: true,
+  position: 'start',
+  onDragStart: onDragStart,
+  onDrop: onDrop,
+  onSnapEnd: onSnapEnd,
+  pieceTheme : pieceTheme
+};
+
+board = Chessboard('board1', config);
+$(window).resize(board.resize);
+
+updateStatus();
+
+game.load_pgn(puzzleData.game.pgn);
+board.position(game.fen());
+if(game.turn() === 'b') {
+    board.orientation('black');
+} else {
+    board.orientation('white');
+}
+
+$("#turn").text(((game.turn() === 'b') ? "Black" : "White") + " to move");
+$("turn-heading").css("background-color", game.turn() === "w" ? "rgb(226, 226, 226)" : "rgb(0,0,0)");
+$("#turn").css("color", game.turn() === "w" ? "rgb(0,0,0)" : "rgb(255,255,255)");
+
+</script>
+</html>
