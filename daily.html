@@ -23,27 +23,7 @@
         integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
         crossorigin="anonymous"></script>
 
-    <style>
-
-        #chess {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        #ui {
-            width:50%;
-        }
-
-        #turn-heading {
-            background-color: black;
-            font-weight: bold;
-            font-size: 2em;
-            text-align: center;
-            padding:8px;
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <section id="chess">
@@ -52,10 +32,8 @@
                 <p id='turn'></p>
             </div>
         </div>
-        <div id="board1" style="width: 50%"></div>
-
+        <div id="board1" style="width: 100%"></div>
     </section>
-    
 </body>
 <script>
 
@@ -75,7 +53,7 @@ $.ajax({
 });
 
 function pieceTheme(piece) {
-    return `/imgs/${piece}.png`;
+    return `https://chessmates.com.au/wp-content/uploads/${piece}.png`;
 }
 
 var board = null;
@@ -181,8 +159,8 @@ if(game.turn() === 'b') {
 }
 
 $("#turn").text(((game.turn() === 'b') ? "Black" : "White") + " to move");
-$("turn-heading").css("background-color", game.turn() === "w" ? "rgb(226, 226, 226)" : "rgb(0,0,0)");
-$("#turn").css("color", game.turn() === "w" ? "rgb(0,0,0)" : "rgb(255,255,255)");
+$("turn-heading").css("background-color", (game.turn() === "w") ? "white" : "black");
+$("#turn").css("color", game.turn() === "w" ? "black" : "white");
 
 </script>
 </html>
