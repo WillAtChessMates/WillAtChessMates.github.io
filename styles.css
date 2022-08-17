@@ -4,3 +4,15 @@
     text-align: center;
     padding:8px;
 }
+
+.black-3c85d {
+    background-color: #4b7399 !important;
+}
+
+.white-1e1d7 {
+    background-color: #eae9d2 !important;
+}
+
+.highlight1-32417, .highlight2-9c5d2 {
+    box-shadow: inset 0 0 3px 3px #54a8f7;
+  }
