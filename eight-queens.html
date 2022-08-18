@@ -97,20 +97,31 @@ $("input[value='Check']").click(function() {
 });
 
 function checkAnswer() {
-  let boardPos = board.position();
-  for(var occupiedSquare in boardPos) {
-    for(var other in boardPos) {
-      if(occupiedSquare == other) {
+  let positions = Object.keys(board.position()).map(s => (s.substring(0,1).toLowerCase().charCodeAt(0) - 96).toString() + s.substring(1));
+  for(let i = 0; i < positions.length; i++) {
+    for(let j = 0; j < positions.length; j++) {
+      if(i == j) {
         continue;
       }
-      console.log(occupiedSquare.substring(0), other.substring(0));
-      if(occupiedSquare.substring(0,1) == other.substring(0,1) ||
-         occupiedSquare.substring(1) == other.substring(1)) {
-        alert("You have a conflict on the board");
+      let occupiedSquare = positions[i];
+      let other = positions[j];
+      // ranks and files
+      if(occupiedSquare.charAt(0) === other.charAt(0) ||
+         occupiedSquare.charAt(1) === other.charAt(1)) {
+          alert("Not quite right");
+          return;
+      }
+
+      // diagonals
+      let diff = Math.abs(occupiedSquare.charCodeAt(0) - other.charCodeAt(0)) - Math.abs(occupiedSquare.charCodeAt(1) - other.charCodeAt(1));
+      if(diff === 0) {
+        alert("Not quite right");
         return;
       }
     }
   }
+
+  alert(`Well done! You got ${positions.length} Queens on the board.`);
 }
 
 </script>
