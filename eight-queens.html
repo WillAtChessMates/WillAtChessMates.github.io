@@ -27,6 +27,7 @@
 </head>
 <body>
     <div id="board1" style="width: 40%"></div>
+    <input type="submit" value="Check">
 </body>
 <script>
 function pieceTheme(piece) {
@@ -50,15 +51,13 @@ function onDragStart (source, piece, position, orientation) {
   }
 }
 
-function onDrop (source, target, playerMove=true) {
+function onDrop (source, target) {
     // see if the move is legal
     var move = game.move({
         from: source,
         to: target,
         promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
-
-    
 }
 
 // update the board position after the piece snap
@@ -71,15 +70,32 @@ var config = {
   draggable: true,
   position: 'start',
   onDragStart: onDragStart,
-  onDrop: onDrop,
-  onSnapEnd: onSnapEnd,
   pieceTheme : pieceTheme,
-  sparePieces: true,
+  onDrop : onDrop,
   position: {}
 };
 
 board = Chessboard('board1', config);
 $(window).resize(board.resize);
+
+
+Array.from($("[data-square]")).forEach(function(square) {
+  square.addEventListener("click", function() {
+    var boardPos = board.position();
+    if(boardPos[square.dataset.square] === undefined) {
+      boardPos[square.dataset.square] = "wQ";
+    } else {
+      delete boardPos[square.dataset.square];
+      console.log("Remove");
+    }
+    board.position(boardPos);
+  });
+});
+
+//select button with value check jquery
+$("input[value='Check']").click(function() {
+  console.log("Check");
+});
 
 </script>
 </html>
