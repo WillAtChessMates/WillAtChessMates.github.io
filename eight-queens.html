@@ -86,7 +86,6 @@ Array.from($("[data-square]")).forEach(function(square) {
       boardPos[square.dataset.square] = "wQ";
     } else {
       delete boardPos[square.dataset.square];
-      console.log("Remove");
     }
     board.position(boardPos);
   });
@@ -94,8 +93,25 @@ Array.from($("[data-square]")).forEach(function(square) {
 
 //select button with value check jquery
 $("input[value='Check']").click(function() {
-  console.log("Check");
+  checkAnswer();
 });
+
+function checkAnswer() {
+  let boardPos = board.position();
+  for(var occupiedSquare in boardPos) {
+    for(var other in boardPos) {
+      if(occupiedSquare == other) {
+        continue;
+      }
+      console.log(occupiedSquare.substring(0), other.substring(0));
+      if(occupiedSquare.substring(0,1) == other.substring(0,1) ||
+         occupiedSquare.substring(1) == other.substring(1)) {
+        alert("You have a conflict on the board");
+        return;
+      }
+    }
+  }
+}
 
 </script>
 </html>
