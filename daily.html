@@ -23,7 +23,14 @@
         integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
         crossorigin="anonymous"></script>
 
+        <style>
+          @import url('http://fonts.cdnfonts.com/css/montserrat');
+      </style>
+
+
     <link rel="stylesheet" href="styles.css">
+
+    
 </head>
 <body>
     <section id="chess">
@@ -69,12 +76,12 @@ function onDragStart (source, piece, position, orientation) {
   // only pick up pieces for the side to move
   if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
       (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-    return false
+    return false;
   }
 }
 
 function onDrop (source, target, playerMove=true) {
-    if(source + target == puzzleData.puzzle.solution[moveNumber]) {
+    if(source + target == puzzleData.puzzle.solution[moveNumber].substring(0,4)) {
         moveNumber++;
     } else {
         return 'snapback';
@@ -97,7 +104,7 @@ function onDrop (source, target, playerMove=true) {
     }
 
     if(moveNumber == puzzleData.puzzle.solution.length) {
-        console.log('You win!');
+        alert("Well done!");
     }
 }
 

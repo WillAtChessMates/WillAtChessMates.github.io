@@ -26,7 +26,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="board1" style="width: 40%"></div>
+    <div id="board1" style="width: 60%"></div>
     <input type="submit" value="Check">
 </body>
 <script>
@@ -40,24 +40,17 @@ var $status = $('#status');
 var $fen = $('#fen');
 var $pgn = $('#pgn');
 
-function onDragStart (source, piece, position, orientation) {
-  // do not pick up pieces if the game is over
-  if (game.game_over()) return false
-
-  // only pick up pieces for the side to move
-  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-    return false
-  }
-}
-
 function onDrop (source, target) {
-    // see if the move is legal
+  console.log(board.position());
+    if(board.position()[target] === undefined){
+        return;
+    }
     var move = game.move({
         from: source,
         to: target,
         promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
+
 }
 
 // update the board position after the piece snap
@@ -69,27 +62,23 @@ function onSnapEnd () {
 var config = {
   draggable: true,
   position: 'start',
-  onDragStart: onDragStart,
   pieceTheme : pieceTheme,
   onDrop : onDrop,
-  position: {}
+  position: {
+    "a8" : "wQ",
+    "a7" : "wQ",
+    "a6" : "wQ",
+    "a5" : "wQ",
+    "a4" : "wQ",
+    "a3" : "wQ",
+    "a2" : "wQ",
+    "a1" : "wQ",
+  }
 };
 
 board = Chessboard('board1', config);
 $(window).resize(board.resize);
 
-
-Array.from($("[data-square]")).forEach(function(square) {
-  square.addEventListener("click", function() {
-    var boardPos = board.position();
-    if(boardPos[square.dataset.square] === undefined) {
-      boardPos[square.dataset.square] = "wQ";
-    } else {
-      delete boardPos[square.dataset.square];
-    }
-    board.position(boardPos);
-  });
-});
 
 //select button with value check jquery
 $("input[value='Check']").click(function() {

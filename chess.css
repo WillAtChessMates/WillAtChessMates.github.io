@@ -1,0 +1,32 @@
+.row {
+    float:left;
+}
+
+.square {
+    width: 100px;
+    height: 100px;
+    margin: 0;
+    padding: 0;
+}
+
+.square:hover {
+    box-shadow: inset 0 0 3px 3px #54a8f7;
+}
+
+.check {
+    box-shadow: inset 0 0 3px 3px red;
+}
+
+.square img {
+    width: 100%;
+    height: 100%;
+}
+
+
+.white-square {
+    background-color: #eae9d2;
+}
+
+.black-square {
+    background-color: #4b7399;
+}
