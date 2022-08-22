@@ -4,6 +4,7 @@ class Board {
         this.boardId = id;
         this.selectedPiece = null;
         var board = this;
+        var boardContainer = $(`#${id}`);
         this.dropTarget = null;
         for(let i = 0; i < 8; i++) {
             let row = $("<div class='row'></div>");
@@ -17,7 +18,8 @@ class Board {
                 });
                 row.append(square);
             }
-            $(`#${id}`).append(row);
+            boardContainer.append(row);
+
         }
     }
 

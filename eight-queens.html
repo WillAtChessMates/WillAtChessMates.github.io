@@ -13,6 +13,7 @@
 </head>
 <body>
     <div id="board1" style="width: 60%"></div>
+    <button id="check-answer">Check</button>
 </body>
 <script src="chess.js"></script>
 <script>
@@ -30,7 +31,7 @@ Array.from($(".square")).forEach(function(square) {
 });
 
 //select button with value check jquery
-$("input[value='Check']").click(function() {
+$("#check-answer").click(function() {
   checkAnswer();
 });
 
@@ -58,7 +59,7 @@ function checkAnswer() {
       }
     }
   }
-  alert("Well done!");
+  alert(`Well done! You got ${positions.length} queen${positions.length != 1 ? "s" : ""} on the board.`);
 }
 
 </script>
