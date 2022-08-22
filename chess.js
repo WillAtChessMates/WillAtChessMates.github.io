@@ -9,15 +9,10 @@ class Board {
             let row = $("<div class='row'></div>");
             for(let j = 0; j < 8; j++) {
                 let square = $(`<div class='square ${((i + j) % 2 == 0 ? "white-square" : "black-square")}' data-coord='${`${String.fromCharCode(i + 1 + 96)}${8 - j}`}'></div>`);
-                square.on("click", function(e) {
-                    e.stopPropagation();
-                    board.movePiece(this);
-                });
 
                 square.on("dragover", function(e) {
                     e.stopPropagation();
                     e.preventDefault();
-                    console.log("Dragover");
                     board.dropTarget = this;
                 });
                 row.append(square);
@@ -36,9 +31,13 @@ class Board {
         this.selectedPiece = null;
     }
 
+    isSquareEmpty(square) {
+        return this.position[square] == undefined || this.position[square] == null;
+    }
+
     movePiece(square) {
-        console.log(square);
         if(this.selectPiece != null && this.selectedPiece != undefined) {
+            $(square).empty();
             square.appendChild(this.selectedPiece);
             this.deselectPiece();
         }
@@ -67,6 +66,16 @@ class Board {
         this.updateBoard();
     }
 
+    placePiece(pieceType, pieceColor, square) {
+        this.position[square] = pieceColor + pieceType;
+        this.updateBoard();
+    }
+
+    removePiece(square) {
+        delete this.position[square];
+        this.updateBoard();
+    }
+
     updateBoard() {
         var board = this;
         $(`#${this.boardId}`).children().each(function(i, row) {
@@ -74,19 +83,11 @@ class Board {
                 if(square.dataset.coord in board.position) {
                     if($(square).children().length == 0) {
                         let img = $(`<img id='draggable' src='https://chessmates.com.au/wp-content/uploads/${board.position[square.dataset.coord]}.png'>`);
-                        img.on("click", function(e) {
-                            e.stopPropagation();
-                            console.log("click piece");
-                            board.selectPiece(this);
-                        });
                         img.on("dragstart", function(e) {
                             board.selectPiece(this);
-                            console.log("Drag Start");
                         });
 
                         img.on("dragend", function(e) {
-                            console.log("Drag End");
-                            console.log(board.dropTarget);
                             if(board.dropTarget != null || board.dropTarget != undefined) {
                                 board.movePiece(board.dropTarget);
                             }

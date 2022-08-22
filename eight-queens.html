@@ -8,77 +8,26 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-
-    <link rel="stylesheet"
-      href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
-      crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
-        crossorigin="anonymous"></script>
-
-    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-        crossorigin="anonymous"></script>
-
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="chess.css">
 </head>
 <body>
     <div id="board1" style="width: 60%"></div>
-    <input type="submit" value="Check">
 </body>
+<script src="chess.js"></script>
 <script>
-function pieceTheme(piece) {
-    return `https://chessmates.com.au/wp-content/uploads/${piece}.png`;
-}
 
-var board = null;
-var game = new Chess();
-var $status = $('#status');
-var $fen = $('#fen');
-var $pgn = $('#pgn');
+var board = new Board('board1');
 
-function onDrop (source, target) {
-  console.log(board.position());
-    if(board.position()[target] === undefined){
-        return;
-    }
-    var move = game.move({
-        from: source,
-        to: target,
-        promotion: 'q' // NOTE: always promote to a queen for example simplicity
+Array.from($(".square")).forEach(function(square) {
+    $(square).click(function() {
+      if(board.isSquareEmpty(this.dataset.coord)) {
+        board.placePiece('Q', 'w', this.dataset.coord);
+      } else {
+        board.removePiece(this.dataset.coord);
+      }
     });
-
-}
-
-// update the board position after the piece snap
-// for castling, en passant, pawn promotion
-function onSnapEnd () {
-  board.position(game.fen())
-}
-
-var config = {
-  draggable: true,
-  position: 'start',
-  pieceTheme : pieceTheme,
-  onDrop : onDrop,
-  position: {
-    "a8" : "wQ",
-    "a7" : "wQ",
-    "a6" : "wQ",
-    "a5" : "wQ",
-    "a4" : "wQ",
-    "a3" : "wQ",
-    "a2" : "wQ",
-    "a1" : "wQ",
-  }
-};
-
-board = Chessboard('board1', config);
-$(window).resize(board.resize);
-
+});
 
 //select button with value check jquery
 $("input[value='Check']").click(function() {
@@ -86,7 +35,7 @@ $("input[value='Check']").click(function() {
 });
 
 function checkAnswer() {
-  let positions = Object.keys(board.position()).map(s => (s.substring(0,1).toLowerCase().charCodeAt(0) - 96).toString() + s.substring(1));
+  let positions = Object.keys(board.position).map(s => (s.substring(0,1).toLowerCase().charCodeAt(0) - 96).toString() + s.substring(1));
   for(let i = 0; i < positions.length; i++) {
     for(let j = 0; j < positions.length; j++) {
       if(i == j) {
@@ -109,8 +58,7 @@ function checkAnswer() {
       }
     }
   }
-
-  alert(`Well done! You got ${positions.length} Queens on the board.`);
+  alert("Well done!");
 }
 
 </script>
