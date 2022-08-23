@@ -104,7 +104,7 @@ function onDrop (source, target, playerMove=true) {
     }
 
     if(moveNumber == puzzleData.puzzle.solution.length) {
-        alert("Well done!");
+        window.postMessage({type: 'puzzle-solved'}, '*');
     }
 }
 
