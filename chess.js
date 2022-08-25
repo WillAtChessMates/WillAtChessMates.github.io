@@ -85,11 +85,11 @@ class Board {
                 if(square.dataset.coord in board.position) {
                     if($(square).children().length == 0) {
                         let img = $(`<img id='draggable' src='https://chessmates.com.au/wp-content/uploads/${board.position[square.dataset.coord]}.png'>`);
-                        img.on("dragstart", function(e) {
+                        img.on("dragstart ontouchmove", function(e) {
                             board.selectPiece(this);
                         });
 
-                        img.on("dragend", function(e) {
+                        img.on("dragend ontouchend", function(e) {
                             if(board.dropTarget != null || board.dropTarget != undefined) {
                                 board.movePiece(board.dropTarget);
                             }
