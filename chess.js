@@ -16,6 +16,11 @@ class Board {
                     e.preventDefault();
                     board.dropTarget = this;
                 });
+
+                square.click(function(e) {
+                    e.stopPropagation();
+                    board.selectPiece(this);
+                });
                 row.append(square);
             }
             boardContainer.append(row);
