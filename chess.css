@@ -10,6 +10,13 @@
     padding: 0;
 }
 
+@media (max-width:600px) {
+    .square {
+        width:12.5vw;
+        height:12.5vw;
+    }
+}
+
 .square:hover {
     box-shadow: inset 0 0 3px 3px #54a8f7;
 }
