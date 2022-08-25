@@ -19,7 +19,7 @@ class Board {
 
                 square.click(function(e) {
                     e.stopPropagation();
-                    board.selectPiece(this);
+                    board.movePiece(this);
                 });
                 row.append(square);
             }
@@ -90,7 +90,7 @@ class Board {
                 if(square.dataset.coord in board.position) {
                     if($(square).children().length == 0) {
                         let img = $(`<img id='draggable' src='https://chessmates.com.au/wp-content/uploads/${board.position[square.dataset.coord]}.png'>`);
-                        img.on("dragstart", function(e) {
+                        img.on("dragstart click", function(e) {
                             board.selectPiece(this);
                         });
 
