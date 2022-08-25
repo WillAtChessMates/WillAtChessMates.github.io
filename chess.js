@@ -17,15 +17,23 @@ class Board {
                     board.dropTarget = this;
                 });
 
-                square.click(function(e) {
-                    e.stopPropagation();
-                    board.movePiece(this);
-                });
                 row.append(square);
             }
             boardContainer.append(row);
 
         }
+
+        boardContainer.on("touchmove", function(e) {
+            e.preventDefault();
+            var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+            var x = touch.pageX - boardContainer.offset().left;
+            var y = touch.pageY - boardContainer.offset().top;
+            $(".square").each(function(i, square) {
+                if(square.offsetLeft <= x && square.offsetLeft + square.offsetWidth >= x && square.offsetTop <= y && square.offsetTop + square.offsetHeight >= y) {
+                    board.dropTarget = square;
+                }
+            });
+        });
     }
 
     selectPiece(piece) {
@@ -90,11 +98,11 @@ class Board {
                 if(square.dataset.coord in board.position) {
                     if($(square).children().length == 0) {
                         let img = $(`<img id='draggable' src='https://chessmates.com.au/wp-content/uploads/${board.position[square.dataset.coord]}.png'>`);
-                        img.on("dragstart click", function(e) {
+                        img.on("dragstart touchstart", function(e) {
                             board.selectPiece(this);
                         });
 
-                        img.on("dragend", function(e) {
+                        img.on("dragend touchend", function(e) {
                             if(board.dropTarget != null || board.dropTarget != undefined) {
                                 board.movePiece(board.dropTarget);
                             }
