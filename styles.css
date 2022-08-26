@@ -28,4 +28,11 @@ button {
     outline:none;
     background-color: #1c78dc;
     color:white;
+    display: block;
+    clear: both;
+}
+
+button:hover {
+    background-color: #4a92de;
+    cursor: pointer;
 }
