@@ -59,6 +59,7 @@ function checkAnswer() {
       }
     }
   }
+  window.parent.postMessage({type: 'puzzle-solved', number: positions.length}, '*');
   alert(`Well done! You got ${positions.length} queen${positions.length != 1 ? "s" : ""} on the board.`);
 }
 

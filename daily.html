@@ -39,7 +39,7 @@
                 <p id='turn'></p>
             </div>
         </div>
-        <div id="board1" style="width: 95%"></div>
+        <div id="board1"></div>
     </section>
 </body>
 <script>
@@ -55,11 +55,7 @@ $.ajax({
     async: false,
     success: function(data) {
         puzzleData = data;
-        console.log(data);
     },
-    error: function(data) {
-        console.log(data);
-    }
 });
 
 function pieceTheme(piece) {
