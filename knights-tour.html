@@ -18,5 +18,17 @@
 
 <script>
     var board = new Board('board1');
+    var startSelected = false;
+
+    $('.square').each(function(index, square) {
+        $(square).on('click', function() {
+            if(!startSelected) {
+                board.placePiece('N', 'w', this.dataset.coord);
+                startSelected = true;
+            }
+        });
+    });
+
+    
 </script>
 </html>

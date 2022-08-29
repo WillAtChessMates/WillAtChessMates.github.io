@@ -63,5 +63,21 @@ function checkAnswer() {
   alert(`Well done! You got ${positions.length} queen${positions.length != 1 ? "s" : ""} on the board.`);
 }
 
+$.ajax({
+  url: "https://chessmates.com.au/kajabi.php",
+  type : 'GET',
+  data : {
+      email : email,
+      type : 'get-queens'
+  },
+  success : function(data) {
+    let dailyImg = $("a[href='https://www.chessmates.online/eight-queens']").get(0);
+    let a = $(`<div class='puzzle-progress'>${data}/8</div>`).get(0);
+    dailyImg.appendChild(a);
+  }
+});
+
+
 </script>
 </html>
+
