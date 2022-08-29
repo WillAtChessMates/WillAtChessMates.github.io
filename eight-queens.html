@@ -17,7 +17,7 @@
     <section class="popup">
       <div>
         <h1>Well Done!</h1>
-        <button id="close"><a href="https://www.chessmates.online/puzzles">Back</a></button>
+        <button id="close">Back</button>
       </div>
     </section>
 </body>
@@ -39,6 +39,10 @@ Array.from($(".square")).forEach(function(square) {
 //select button with value check jquery
 $("#check-answer").click(function() {
   checkAnswer();
+});
+
+$("#close").on("click", function() {
+  window.location.href = "https://www.chessmates.online/puzzles";
 });
 
 function checkAnswer() {
