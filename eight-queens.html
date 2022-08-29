@@ -36,13 +36,12 @@ Array.from($(".square")).forEach(function(square) {
     });
 });
 
-//select button with value check jquery
 $("#check-answer").click(function() {
   checkAnswer();
 });
 
 $("#close").on("click", function() {
-  top.window.location.href = "https://www.chessmates.online/puzzles";
+  $(".popup").css("display", "none");
 });
 
 function checkAnswer() {
