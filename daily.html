@@ -41,6 +41,12 @@
         </div>
         <div id="board1"></div>
     </section>
+    <section class="popup">
+      <div>
+        <h1>Well Done!</h1>
+        <button id="close"><a href="https://www.chessmates.online/puzzles">Back</a></button>
+      </div>
+    </section>
 </body>
 <script>
 
@@ -104,7 +110,7 @@ function onDrop (source, target, playerMove=true) {
 
     if(moveNumber == puzzleData.puzzle.solution.length) {
         window.parent.postMessage({type: 'puzzle-solved', id: puzzleData.puzzle.id}, '*');
-        alert("Well done!");
+        $('.popup').css('display', 'flex');
     }
 }
 

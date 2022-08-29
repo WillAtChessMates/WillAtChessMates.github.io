@@ -48,11 +48,13 @@ var puzzleData = null;
 var moveNumber = 0;
 
 $.ajax({
-    url: "https://willatchessmates.github.io/puzzles.txt",
+    url: "https://chessmates.com.au/get_puzzle.php",
     type: "GET",
     async: false,
+    dataType: "json",
     success: function(data) {
-        console.log(data.split("\n"));
+        puzzleData = data;
+        console.log(puzzleData);
     },
     error: function(data) {
         console.log(data);
@@ -81,7 +83,7 @@ function onDragStart (source, piece, position, orientation) {
 }
 
 function onDrop (source, target, playerMove=true) {
-    if(source + target == puzzleData.puzzle.solution[moveNumber].substring(0,4)) {
+    if(source + target == puzzleData.solution[moveNumber].substring(0,4)) {
         moveNumber++;
     } else {
         return 'snapback';
@@ -99,12 +101,12 @@ function onDrop (source, target, playerMove=true) {
     }
 
     updateStatus();
-    if(playerMove && puzzleData.puzzle.solution[moveNumber] != null) {
-        onDrop(puzzleData.puzzle.solution[moveNumber].substring(0, 2), puzzleData.puzzle.solution[moveNumber].substring(2, 4), false);
+    if(playerMove && puzzleData.solution[moveNumber] != null) {
+        onDrop(puzzleData.solution[moveNumber].substring(0, 2), puzzleData.solution[moveNumber].substring(2, 4), false);
     }
 
-    if(moveNumber == puzzleData.puzzle.solution.length) {
-        window.parent.postMessage({type: 'puzzle-solved', id: puzzleData.puzzle.id}, '*');
+    if(moveNumber == puzzleData.solution.length) {
+        window.parent.postMessage({type: 'puzzle-solved', id: puzzleData.id}, '*');
         alert("Well done!");
     }
 }
@@ -158,7 +160,7 @@ $(window).resize(board.resize);
 
 updateStatus();
 
-game.load_pgn(puzzleData.game.pgn);
+game.load(puzzleData.fen);
 board.position(game.fen());
 if(game.turn() === 'b') {
     board.orientation('black');
