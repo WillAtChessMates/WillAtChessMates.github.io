@@ -1,0 +1,5 @@
+Lceuf,r2q2k1/p5p1/2pbp1rp/3p1n1N/2pP1BP1/5P1P/PP3Q2/R3R1K1 b - - 0 23,f5h4 f4d6 h4f3 f2f3,1207,76,92,732,advantage middlegame short,https://lichess.org/zszB0C0i/black#46
+LceyM,r4rk1/p1pn2p1/bp1bpq1p/3p4/3P4/1PP1PNP1/PB4BP/R2QR1K1 b - - 0 15,a6d3 d1d3 f6f3 g2f3,1082,172,57,9,crushing hangingPiece middlegame short,https://lichess.org/S2cvqB0V/black#30Dutch_Defense,Dutch_Defense_Other_variations
+LceyY,1kq2b2/pp2rB2/2pR2Pp/2n1pQ2/4P3/P1N1P3/1PP5/2K5 b - - 7 28,e7f7 f5f7 f8d6 g6g7,2058,77,87,238,advancedPawn crushing middlegame short,https://lichess.org/9z9DwbN2/black#56
+Lcf0w,4r1k1/1rR3p1/5p1p/pq6/6PP/PP6/2Q2P2/2R3K1 w - - 2 34,c2g6 b7c7 c1c7 e8e1 g1h2 b5e5,1400,79,75,119,crushing endgame long,https://lichess.org/t43cwJHh#67
+Lcf4p,3kr3/pp1b4/3P1K2/2pB4/8/8/P7/5R2 w - - 4 45,d5b7 e8f8 f6e5 f8f1,1388,91,43,30,crushing endgame short skewer,https://lichess.org/tm4vVXMW#89
