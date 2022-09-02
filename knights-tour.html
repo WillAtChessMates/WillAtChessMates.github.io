@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eight Queens</title>
+    <title>Knight's Tour</title>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
@@ -17,17 +17,58 @@
 <script src="chess.js"></script>
 
 <script>
-    var board = new Board('board1');
+    var board = new Board('board1', knightMove);
     var startSelected = false;
+    var visited = [];
 
     $('.square').each(function(index, square) {
         $(square).on('click', function() {
             if(!startSelected) {
                 board.placePiece('N', 'w', this.dataset.coord);
+                visit(this.dataset.coord);
                 startSelected = true;
             }
         });
     });
+
+    function visit(coord) {
+        visited.push(coord);
+        $('[data-coord="' + coord + '"]').css('background-color', 'green');
+    }
+
+    function knightMove(start, square) {
+        var end = square.dataset.coord;
+        var diff = Math.abs(start.charCodeAt(0) - end.charCodeAt(0));
+        var diff2 = Math.abs(start.charCodeAt(1) - end.charCodeAt(1));
+        var validMove = (diff === 2 && diff2 === 1 || diff === 1 && diff2 === 2) && !visited.includes(end);
+        if(validMove) {
+            visit(end);
+        }
+
+        if(isGameOver()) {
+            alert(`Well done, you got to ${visited.length} squares!`);
+        }
+
+        return validMove;
+    }
+
+    function isGameOver() {
+        var currentCoord = $('[data-coord="' + visited[visited.length - 1] + '"]')[0].dataset.coord;
+        // calculate all squares that are a knights jump away from currentSquare (excluding visited squares) without using knightMove()
+        var possibleMoves = 0;
+        for(let i = 0; i < 8; i++) {
+            for(let j = 0; j < 8; j++) {
+                var diff = Math.abs(currentCoord.charCodeAt(0) - String.fromCharCode(97 + i).charCodeAt(0));
+                var diff2 = Math.abs(currentCoord.charCodeAt(1) - String.fromCharCode(49 + j).charCodeAt(0));
+                var validMove = (diff === 2 && diff2 === 1 || diff === 1 && diff2 === 2) && !visited.includes(String.fromCharCode(97 + i) + String.fromCharCode(49 + j));
+                if(validMove) {
+                    possibleMoves++;
+                }
+            }
+        }
+
+        return possibleMoves == 0;
+    }
 
     
 </script>

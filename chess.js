@@ -1,11 +1,12 @@
 class Board {
-    constructor(id) {
+    constructor(id, onMove = undefined) {
         this.position = {};
         this.boardId = id;
         this.selectedPiece = null;
         var board = this;
         var boardContainer = $(`#${id}`);
         this.dropTarget = null;
+        this.onMove = onMove;
         for(let i = 0; i < 8; i++) {
             let row = $("<div class='row'></div>");
             for(let j = 0; j < 8; j++) {
@@ -37,12 +38,10 @@ class Board {
     }
 
     selectPiece(piece) {
-        $(piece).css("opacity", "0.5");
         this.selectedPiece = piece;
     }
 
     deselectPiece() {
-        $(this.selectedPiece).css("opacity", "1");
         this.selectedPiece = null;
     }
 
@@ -51,7 +50,13 @@ class Board {
     }
 
     movePiece(square) {
-        if(this.selectPiece != null && this.selectedPiece != undefined) {
+        if(this.selectedPiece != null && this.selectedPiece != undefined) {
+            let start = this.selectedPiece.dataset.coord;
+            if(this.onMove != undefined) {
+                if(!this.onMove(this.selectedPiece.parentElement.dataset.coord, square)) {
+                    return;
+                }
+            }
             $(square).empty();
             square.appendChild(this.selectedPiece);
             this.deselectPiece();
