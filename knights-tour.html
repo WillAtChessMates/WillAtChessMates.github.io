@@ -13,6 +13,13 @@
 </head>
 <body>
     <div id="board1"></div>
+    <section class="popup">
+        <div>
+          <h1>Well Done!</h1>
+          <p></p>
+          <button id="close">Close</button>
+        </div>
+      </section>
 </body>
 <script src="chess.js"></script>
 
@@ -20,6 +27,11 @@
     var board = new Board('board1', knightMove);
     var startSelected = false;
     var visited = [];
+
+    $("#close").on("click", function() {
+        $(".popup").css("display", "none");
+    });
+
 
     $('.square').each(function(index, square) {
         $(square).on('click', function() {
@@ -46,7 +58,8 @@
         }
 
         if(isGameOver()) {
-            alert(`Well done, you got to ${visited.length} squares!`);
+            $(".popup").css("display", "flex");
+            $(".popup p").text(`You visited ${visited.length}/64 squares`);
         }
 
         return validMove;
