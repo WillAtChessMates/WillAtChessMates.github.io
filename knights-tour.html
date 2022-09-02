@@ -60,6 +60,7 @@
         if(isGameOver()) {
             $(".popup").css("display", "flex");
             $(".popup p").text(`You visited ${visited.length}/64 squares`);
+            window.parent.postMessage({type: 'puzzle-solved', number: visited.length}, '*');
         }
 
         return validMove;
