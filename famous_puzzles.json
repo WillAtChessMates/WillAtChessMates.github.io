@@ -1,0 +1,11 @@
+{
+    "puzzles" : [
+        {
+            "name" : "Opera Game",
+            "fen" : "4kb1r/p2r1ppp/4qn2/1B2p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 2 15",
+            "solution" : ["b5d7", "f6d7", "b3b8", "d7b8", "d1d8"],
+            "white" : "Paul Morphy",
+            "black" : "Duke Karl & Count Isouard"
+        }
+    ]
+}

@@ -1,174 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Puzzles</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Puzzles</title>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 
-    <link rel="stylesheet"
-      href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
-      integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU"
-      crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css"
+    integrity="sha384-q94+BZtLrkL1/ohfjR8c6L+A6qzNH9R2hBLwyoAfu3i/WCvQjzL2RQJ3uNHDISdU" crossorigin="anonymous">
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
-        crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous">
+  </script>
 
-    <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
-        integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD"
-        crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.js"
+    integrity="sha384-8Vi8VHwn3vjQ9eUHUxex3JSN/NFqUg3QbPyX8kWyb93+8AC/pPWTzj+nHtbC5bxD" crossorigin="anonymous">
+  </script>
 
-        <style>
-          @import url('http://fonts.cdnfonts.com/css/montserrat');
-      </style>
+  <style>
+    @import url('http://fonts.cdnfonts.com/css/montserrat');
+  </style>
 
 
-    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css">
 
-    
+
 </head>
+
 <body>
-    <section id="chess">
-        <div id="ui">
-            <div id="turn-heading">
-                <p id='turn'></p>
-            </div>
-        </div>
-        <div id="board1" style="width: 95%"></div>
-    </section>
+  <section id="chess">
+    <div id="ui">
+      <div id="turn-heading">
+        <p id='turn'></p>
+      </div>
+    </div>
+    <div id="board1" style="width: 95%"></div>
+  </section>
 </body>
 <script>
+  var puzzleData = null;
+  var moveNumber = 1;
 
-var puzzleData = null;
-var moveNumber = 0;
-
-$.ajax({
-    url: "https://chessmates.com.au/get_puzzle.php",
-    type: "GET",
-    async: false,
-    dataType: "json",
-    success: function(data) {
-        puzzleData = data;
-        console.log(puzzleData);
-    },
-    error: function(data) {
-        console.log(data);
-    }
-});
-
-function pieceTheme(piece) {
+  function pieceTheme(piece) {
     return `https://chessmates.com.au/wp-content/uploads/${piece}.png`;
-}
-
-var board = null;
-var game = new Chess();
-var $status = $('#status');
-var $fen = $('#fen');
-var $pgn = $('#pgn');
-
-function onDragStart (source, piece, position, orientation) {
-  // do not pick up pieces if the game is over
-  if (game.game_over()) return false
-
-  // only pick up pieces for the side to move
-  if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
-      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
-    return false;
   }
-}
 
-function onDrop (source, target, playerMove=true) {
-    if(source + target == puzzleData.solution[moveNumber].substring(0,4)) {
-        moveNumber++;
+  var board = null;
+  var game = new Chess();
+  var $status = $('#status');
+  var $fen = $('#fen');
+  var $pgn = $('#pgn');
+
+  function onDragStart(source, piece, position, orientation) {
+    // do not pick up pieces if the game is over
+    if (game.game_over()) return false
+
+    // only pick up pieces for the side to move
+    if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+      (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+      return false;
+    }
+  }
+
+  function onDrop(source, target, playerMove = true) {
+    if (source + target == puzzleData.solution[moveNumber].substring(0, 4)) {
+      moveNumber++;
     } else {
-        return 'snapback';
+      return 'snapback';
     }
     // see if the move is legal
     var move = game.move({
-        from: source,
-        to: target,
-        promotion: 'q' // NOTE: always promote to a queen for example simplicity
+      from: source,
+      to: target,
+      promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
 
     // illegal move
     if (move === null) {
-        return 'snapback';
+      return 'snapback';
     }
 
     updateStatus();
-    if(playerMove && puzzleData.solution[moveNumber] != null) {
-        onDrop(puzzleData.solution[moveNumber].substring(0, 2), puzzleData.solution[moveNumber].substring(2, 4), false);
+    if (playerMove && puzzleData.solution[moveNumber] != null) {
+      onDrop(puzzleData.solution[moveNumber].substring(0, 2), puzzleData.solution[moveNumber].substring(2, 4), false);
     }
 
-    if(moveNumber == puzzleData.solution.length) {
-        window.parent.postMessage({type: 'puzzle-solved', id: puzzleData.id}, '*');
-        alert("Well done!");
-    }
-}
-
-// update the board position after the piece snap
-// for castling, en passant, pawn promotion
-function onSnapEnd () {
-  board.position(game.fen())
-}
-
-function updateStatus () {
-  var status = ''
-
-  var moveColor = 'White'
-  if (game.turn() === 'b') {
-    moveColor = 'Black'
-  }
-
-  // checkmate?
-  if (game.in_checkmate()) {
-    status = 'Game over, ' + moveColor + ' is in checkmate.'
-  }
-
-  // draw?
-  else if (game.in_draw()) {
-    status = 'Game over, drawn position'
-  }
-
-  // game still on
-  else {
-    status = moveColor + ' to move'
-
-    // check?
-    if (game.in_check()) {
-      status += ', ' + moveColor + ' is in check'
+    if (moveNumber == puzzleData.solution.length) {
+      window.parent.postMessage({
+        type: 'puzzle-solved',
+        id: puzzleData.id
+      }, '*');
+      alert("Well done!");
     }
   }
-}
 
-var config = {
-  draggable: true,
-  position: 'start',
-  onDragStart: onDragStart,
-  onDrop: onDrop,
-  onSnapEnd: onSnapEnd,
-  pieceTheme : pieceTheme
-};
+  // update the board position after the piece snap
+  // for castling, en passant, pawn promotion
+  function onSnapEnd() {
+    board.position(game.fen())
+  }
 
-board = Chessboard('board1', config);
-$(window).resize(board.resize);
+  function updateStatus() {
+    var status = ''
 
-updateStatus();
+    var moveColor = 'White'
+    if (game.turn() === 'b') {
+      moveColor = 'Black'
+    }
 
-game.load(puzzleData.fen);
-board.position(game.fen());
-if(game.turn() === 'b') {
-    board.orientation('black');
-} else {
-    board.orientation('white');
-}
+    // checkmate?
+    if (game.in_checkmate()) {
+      status = 'Game over, ' + moveColor + ' is in checkmate.'
+    }
 
-$("#turn").text(((game.turn() === 'b') ? "Black" : "White") + " to move");
+    // draw?
+    else if (game.in_draw()) {
+      status = 'Game over, drawn position'
+    }
 
+    // game still on
+    else {
+      status = moveColor + ' to move'
+
+      // check?
+      if (game.in_check()) {
+        status += ', ' + moveColor + ' is in check'
+      }
+    }
+  }
+
+  function setBoard() {
+    $.ajax({
+      url: "https://chessmates.com.au/get_puzzle.php",
+      type: "GET",
+      async: false,
+      dataType: "json",
+      success: function (data) {
+        puzzleData = data;
+        console.log(puzzleData);
+      },
+      error: function (data) {
+        console.log(data);
+      }
+    });
+
+    game.load(puzzleData.fen);
+    game.move({
+      from: puzzleData.solution[0].substring(0, 2),
+      to: puzzleData.solution[0].substring(2, 4)
+    });
+    board.position(game.fen());
+
+    updateStatus();
+
+    if (game.turn() === 'b') {
+      board.orientation('black');
+    } else {
+      board.orientation('white');
+    }
+
+    $("#turn").text(((game.turn() === 'b') ? "Black" : "White") + " to move");
+
+  }
+
+  var config = {
+    draggable: true,
+    position: 'start',
+    onDragStart: onDragStart,
+    onDrop: onDrop,
+    onSnapEnd: onSnapEnd,
+    pieceTheme: pieceTheme
+  };
+
+  board = Chessboard('board1', config);
+  $(window).resize(board.resize);
+
+  setBoard();
 </script>
+
 </html>

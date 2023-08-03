@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Knight's Tour</title>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="chess.css">
 </head>
+
 <body>
     <div id="board1"></div>
     <section class="popup">
         <div>
-          <h1>Well Done!</h1>
-          <p></p>
-          <button id="close">Close</button>
+            <h1>Well Done!</h1>
+            <p></p>
+            <button id="close">Close</button>
         </div>
-      </section>
+    </section>
 </body>
-<script src="chess.js"></script>
+<script src="chess_board.js"></script>
 
 <script>
     var board = new Board('board1', knightMove);
     var startSelected = false;
     var visited = [];
 
-    $("#close").on("click", function() {
+    $("#close").on("click", function () {
         $(".popup").css("display", "none");
     });
 
 
-    $('.square').each(function(index, square) {
-        $(square).on('click', function() {
-            if(!startSelected) {
+    $('.square').each(function (index, square) {
+        $(square).on('click', function () {
+            if (!startSelected) {
                 board.placePiece('N', 'w', this.dataset.coord);
                 visit(this.dataset.coord);
                 startSelected = true;
@@ -53,14 +56,17 @@
         var diff = Math.abs(start.charCodeAt(0) - end.charCodeAt(0));
         var diff2 = Math.abs(start.charCodeAt(1) - end.charCodeAt(1));
         var validMove = (diff === 2 && diff2 === 1 || diff === 1 && diff2 === 2) && !visited.includes(end);
-        if(validMove) {
+        if (validMove) {
             visit(end);
         }
 
-        if(isGameOver()) {
+        if (isGameOver()) {
             $(".popup").css("display", "flex");
             $(".popup p").text(`You visited ${visited.length}/64 squares`);
-            window.parent.postMessage({type: 'puzzle-solved', number: visited.length}, '*');
+            window.parent.postMessage({
+                type: 'puzzle-solved',
+                number: visited.length
+            }, '*');
         }
 
         return validMove;
@@ -70,12 +76,13 @@
         var currentCoord = $('[data-coord="' + visited[visited.length - 1] + '"]')[0].dataset.coord;
         // calculate all squares that are a knights jump away from currentSquare (excluding visited squares) without using knightMove()
         var possibleMoves = 0;
-        for(let i = 0; i < 8; i++) {
-            for(let j = 0; j < 8; j++) {
+        for (let i = 0; i < 8; i++) {
+            for (let j = 0; j < 8; j++) {
                 var diff = Math.abs(currentCoord.charCodeAt(0) - String.fromCharCode(97 + i).charCodeAt(0));
                 var diff2 = Math.abs(currentCoord.charCodeAt(1) - String.fromCharCode(49 + j).charCodeAt(0));
-                var validMove = (diff === 2 && diff2 === 1 || diff === 1 && diff2 === 2) && !visited.includes(String.fromCharCode(97 + i) + String.fromCharCode(49 + j));
-                if(validMove) {
+                var validMove = (diff === 2 && diff2 === 1 || diff === 1 && diff2 === 2) && !visited.includes(String
+                    .fromCharCode(97 + i) + String.fromCharCode(49 + j));
+                if (validMove) {
                     possibleMoves++;
                 }
             }
@@ -83,7 +90,6 @@
 
         return possibleMoves == 0;
     }
-
-    
 </script>
+
 </html>
