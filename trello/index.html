@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://p.trellocdn.com/power-up.min.js"></script>
+    <script>
+        TrelloPowerUp.initialize({
+            'card-buttons' : function(t, options) {
+                return [{
+                    text: 'Test Button',
+                    callback: function(t, options) {
+                        return t.popup({
+                            title: 'Test Popup',
+                            url: 'popup.html'
+                        });
+                    }
+                }]
+            }
+            
+        });
+    </script>
+</body>
+</html>
